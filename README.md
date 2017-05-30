@@ -2,7 +2,7 @@
 This is a (very) little JavaScript library that wraps Bootstrap Tour, allowing one or more guided
 tours to be created in a web page *without* coding.
 
-It's named after the great Bootsy Collins (but only because his name has "boot" in it).
+It's named after the great [Bootsy Collins](https://en.wikipedia.org/wiki/Bootsy_Collins) (but only because his name has "boot" in it).
 
 ## Prerequisites
 Requires Bootstrap Tour, which in turn runs on Bootstrap and jQuery.

@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 // FIXME (doc): explicit placement isn't supported, so explain this in the docs and remove placementAttribName
 // FIXME: when an explicit step is started (or even maybe when a main button is clicked), need to make sure the existing tour is stopped
 

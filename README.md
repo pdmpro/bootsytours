@@ -35,7 +35,7 @@ When any tour is starting...
  * Using all that structure, we've now found the particulars for all tours on the page; the last step is to instantiate
 	Boostrap Tour's `Tour` class with the required step data, and call the start method. They take it from there.
 
-### Notes
+## Usage notes
 
 * The tour will flow in the order that jQuery returns the `.tourStop` elements, so to control that order, you merely
 	arrange your HTML appropriately. Because the targets are explicitly called out, the tour can bounce around the page
@@ -43,6 +43,7 @@ When any tour is starting...
 * The naming convention is hard-coded (tucked inside a private property of the JavaScript
 	tool that runs the show). So, if you want to change them, you only have to do it once, but it does mean
 	modding the source code. _(Future enhancement: make these overridable.)_
-	
-## Author
-* Glen Ford - initial work - [pdmpro](https://github.com/pdmpro)
+* Explicit placement isn't supported. `defaultPlacement: "auto"` tells the underlying Bootstrap Tour code to do its best-effort placement, which is generally pretty good.
+
+## Known issues
+* When an explicit step is started, Bootsy doesn't make sure the existing tour is stopped. It should, but I don't know whether this will have a big impact in the user experience. 

@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// FIXME (doc): explicit placement isn't supported, so explain this in the docs and remove placementAttribName
-// FIXME: when an explicit step is started (or even maybe when a main button is clicked), need to make sure the existing tour is stopped
+// IMPORTANT: this also uses window.console.dirWithMsg, a really helpful bit of console sugar
+// I've been using for years. This will create that function if needed.
+// There should be no harmful side effects.
 
 window.bootsyTours = function() {
 	// first, mod the console if my debugging enhancements aren't in place
@@ -37,7 +38,7 @@ window.bootsyTours = function() {
 		storage: false
 	}
 
-	var DFLT_TOUR = "__DEFT"; // flag used internally -- I wanted to use const here but, alas, not safe yet
+	var DFLT_TOUR = "__DEFT"; // flag used internally
 
 	var tourBag = {}; // Tour instances are collected here
 
@@ -73,7 +74,8 @@ window.bootsyTours = function() {
 		console.info("Bootsy Tours is initializing; if your naming convention fu is good, you'll have a tour soon!");
 
 		// loop through pieces-parts
-		// TODO: document what happens when there are more than one of a required child
+		// -- note that this doesn't try to gracefully handle situations where you have
+		//    more than one of a required child in your HTML
 		$(bootsyOptions.wrapperSelector).each( function(stepIndex, wrapper) {
 			//get the element that owns the content
 			var contentElem = $(this).find(bootsyOptions.contentSelector).first();
@@ -92,21 +94,17 @@ window.bootsyTours = function() {
 			var thisTour = tourGetSet(tourKey);
 			if (!thisTour) {
 				// this is a tour we haven't seen yet in the initilization phase, so create and bag it
-				thisTour = tourGetSet( tourKey, new Tour(componentOptions) ); // TODO: here is where Bootstrap Tour options would be passed
+				thisTour = tourGetSet( tourKey, new Tour(componentOptions) ); // here is where Bootstrap Tour options would be passed
 			}
 
 			// now, create and push the step
 			var step = {
 				element: targetElem,
-				placement: "bottom", // $(wrapper).attr("data-" + bootsyOptions.placementAttribName) || bootsyOptions.defaultPlacement,
+				placement: "bottom",
 				title: $(contentElem).attr("data-" + bootsyOptions.titleAttribName) || bootsyOptions.defaultTooltipTitle,
 				content: $(contentElem).html(),
 				backdrop: componentOptions.useBackdropEffect
 			}
-			// var explicitPlacement = $(wrapper).attr("data-" + bootsyOptions.placementAttribName);
-			// if (explicitPlacement) {
-			// 	step.placement = explicitPlacement;
-			// }
 			thisTour.addStep(step);
 
 			// optionally add click handler to each target so that the tour can be started in the middle
@@ -166,18 +164,6 @@ window.bootsyTours = function() {
 			// init the tour -- it's a no-op if this tour has been initialized already
 			tour = getTourWithInit(tourKey);
 
-			// track the event externally
-			if (typeof mixpanel == "object") {
-				// FIXME: having this here isn't really the right way; need to pass in a function to some options bag
-				// -- also, the "Tour" prefix shouldn't be hard-coded
-				try {
-					mixpanel.track("Tour " + tourKey);
-					console.info("Bootsy Tours tracked the tour start.");
-				} catch(e) {
-					console.dirWithMsg("Error when Bootsy Tours tried to track the tour start");
-				}
-			}
-
 			// how we start the tour will be different depending on options
 			if (options["stepNum"]) {
 				// the caller has requested a non-0 step number (jumping into the middle)
@@ -196,6 +182,7 @@ window.bootsyTours = function() {
 		}
 		,
 		inspectTours: function() {
+			// you can call this directly from the console to dump out some state
 			console.dirWithMsg("Here are the Tours in Bootsy", tourBag);
 		}
 		,
